@@ -6,7 +6,7 @@
 int x_coord_pointer_path[] = { 0x18FCD60, 0x20, 0x4A4, 0x48, 0x4, 0x240, 0xB4, 0x90 };
 int y_coord_pointer_path[] = { 0x18FCD60, 0x20, 0x4A4, 0x48, 0x4, 0x240, 0xB4, 0x94 };
 int z_coord_pointer_path[] = { 0x18FCD60, 0x20, 0x244, 0x20C, 0x1C, 0xD4, 0xD4, 0x98 };
-int health_pointer_path[] =  { 0x018FED60, 0x4,  0x4BC, 0x238, 0x47C, 0x18, 0x3E0, -0x40 };
+int health_pointer_path[] = { 0x018FED60, 0x4,  0x4BC, 0x238, 0x47C, 0x18, 0x3E0, -0x40 };
 
 float* x_coord_address_ptr;
 float* y_coord_address_ptr;
@@ -52,7 +52,7 @@ DWORD WINAPI MyThread(HMODULE hModule)
 	float y_coord = *y_coord_address_ptr;
 	float z_coord = *z_coord_address_ptr;
 	int health = *health_address_ptr;
-
+	int heals_remaining = 5;
 
 	while (true) {
 		bool x_changed = (x_coord != *(float*)x_coord_address_ptr);
@@ -71,9 +71,12 @@ DWORD WINAPI MyThread(HMODULE hModule)
 			*z_coord_address_ptr = *z_coord_address_ptr + 10000;
 		}
 
-		if (GetAsyncKeyState('H') & 1) {
-			std::cout << "   H key pressed";
-			*health_address_ptr = *health_address_ptr + 100;
+		while (heals_remaining!=0) {
+			if (GetAsyncKeyState('H') & 1) {
+				std::cout << "   H key pressed";
+				*health_address_ptr = *health_address_ptr + 100;
+				heals_remaining = heals_remaining - 1;
+			}
 		}
 	}
 	return 0;
