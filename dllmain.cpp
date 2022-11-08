@@ -63,8 +63,8 @@ DWORD WINAPI MyThread(HMODULE hModule)
 	int mana = *mana_address_ptr;
 	float sprint = *sprint_address_ptr;
 	//int heals_remaining = 5;
-	*mana_address_ptr = 0;
-	*sprint_address_ptr = 0;
+	//*mana_address_ptr = 0;
+	//*sprint_address_ptr = 0;
 
 	while (true) {
 		bool x_changed = (x_coord != *(float*)x_coord_address_ptr);
@@ -78,8 +78,9 @@ DWORD WINAPI MyThread(HMODULE hModule)
 			std::cout << " X co-ord: " << x_coord << " Y co-ord: " << y_coord << " Z co-ord: " << z_coord << std::endl;
 		}
 
-		
-		while (GetAsyncKeyState('W') & 1) {
+		// The movement speed
+
+		/*while (GetAsyncKeyState('W') & 1) {
 			*sprint_address_ptr = *sprint_address_ptr + 10;
 			//*mana_address_ptr = *sprint_address_ptr;
 	
@@ -88,8 +89,17 @@ DWORD WINAPI MyThread(HMODULE hModule)
 			*sprint_address_ptr = *sprint_address_ptr - 10;
 			//*mana_address_ptr = *sprint_address_ptr;
 
+		}*/
+
+		//health timer
+
+
+		/*
+		while (*(int*)health_address_ptr != 0) {
+			*health_address_ptr = *health_address_ptr - 1;
+			Sleep(1000);
 		}
-			
+		*/	
 			
 
 		
