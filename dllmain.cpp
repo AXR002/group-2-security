@@ -46,6 +46,79 @@ void init() {
 	sprint_address_ptr = (float*)sprint_address;
 }
 
+void setCoords(float x, float y, float z=10000) {
+	*x_coord_address_ptr = x;
+	*y_coord_address_ptr = y;
+	*z_coord_address_ptr = z;
+}
+
+void displayCoords() {
+	float x_coord = *x_coord_address_ptr;
+	float y_coord = *y_coord_address_ptr;
+	float z_coord = *z_coord_address_ptr;
+
+	bool x_changed = (x_coord != *(float*)x_coord_address_ptr);
+	bool y_changed = (y_coord != *(float*)y_coord_address_ptr);
+	bool z_changed = (z_coord != *(float*)z_coord_address_ptr);
+
+	if (x_changed || y_changed || z_changed) {
+		x_coord = *(float*)x_coord_address_ptr;
+		y_coord = *(float*)y_coord_address_ptr;
+		z_coord = *(float*)z_coord_address_ptr;
+		std::cout << " X co-ord: " << x_coord << " Y co-ord: " << y_coord << " Z co-ord: " << z_coord << std::endl;
+	}
+}
+
+void checkForKeyChanges() {
+	//int heals_remaining = 5;
+	//*mana_address_ptr = 0;
+	//*sprint_address_ptr = 0;
+
+	// The movement speed
+
+	/*while (GetAsyncKeyState('W') & 1) {
+		*sprint_address_ptr = *sprint_address_ptr + 10;
+		//*mana_address_ptr = *sprint_address_ptr;
+
+	}
+	while (GetAsyncKeyState('W') & 0) {
+		*sprint_address_ptr = *sprint_address_ptr - 10;
+		//*mana_address_ptr = *sprint_address_ptr;
+
+	}*/
+
+	//health timer
+
+
+	/*
+	while (*(int*)health_address_ptr != 0) {
+		*health_address_ptr = *health_address_ptr - 1;
+		Sleep(1000);
+	}
+	*/
+
+
+	if (GetAsyncKeyState('F') & 1) {
+		std::cout << "   F key pressed";
+		*z_coord_address_ptr = *z_coord_address_ptr + 10000;
+	}
+
+	//while (heals_remaining!=0) {
+	if (GetAsyncKeyState('H') & 1) {
+		std::cout << "   H key pressed";
+		*health_address_ptr = *health_address_ptr + 100;
+		//heals_remaining = heals_remaining - 1;
+	//}
+	}
+}
+
+void coordRestraintLogic() {
+
+
+
+}
+
+
 
 DWORD WINAPI MyThread(HMODULE hModule)
 {
@@ -56,66 +129,15 @@ DWORD WINAPI MyThread(HMODULE hModule)
 
 	init();
 
-	float x_coord = *x_coord_address_ptr;
-	float y_coord = *y_coord_address_ptr;
-	float z_coord = *z_coord_address_ptr;
-	int health = *health_address_ptr;
-	int mana = *mana_address_ptr;
-	float sprint = *sprint_address_ptr;
-	//int heals_remaining = 5;
-	//*mana_address_ptr = 0;
-	//*sprint_address_ptr = 0;
+	setCoords(-40982, 9000, 100);
 
 	while (true) {
-		bool x_changed = (x_coord != *(float*)x_coord_address_ptr);
-		bool y_changed = (y_coord != *(float*)y_coord_address_ptr);
-		bool z_changed = (z_coord != *(float*)z_coord_address_ptr);
+		displayCoords();
 
-		if (x_changed || y_changed || z_changed) {
-			x_coord = *(float*)x_coord_address_ptr;
-			y_coord = *(float*)y_coord_address_ptr;
-			z_coord = *(float*)z_coord_address_ptr;
-			std::cout << " X co-ord: " << x_coord << " Y co-ord: " << y_coord << " Z co-ord: " << z_coord << std::endl;
-		}
+		//checkForKeyChanges();
 
-		// The movement speed
+		//coordRestraintLogic();
 
-		/*while (GetAsyncKeyState('W') & 1) {
-			*sprint_address_ptr = *sprint_address_ptr + 10;
-			//*mana_address_ptr = *sprint_address_ptr;
-	
-		}
-		while (GetAsyncKeyState('W') & 0) {
-			*sprint_address_ptr = *sprint_address_ptr - 10;
-			//*mana_address_ptr = *sprint_address_ptr;
-
-		}*/
-
-		//health timer
-
-
-		/*
-		while (*(int*)health_address_ptr != 0) {
-			*health_address_ptr = *health_address_ptr - 1;
-			Sleep(1000);
-		}
-		*/	
-			
-
-		
-
-		if (GetAsyncKeyState('F') & 1) {
-			std::cout << "   F key pressed";
-			*z_coord_address_ptr = *z_coord_address_ptr + 10000;
-		}
-
-		//while (heals_remaining!=0) {
-		if (GetAsyncKeyState('H') & 1) {
-			std::cout << "   H key pressed";
-			*health_address_ptr = *health_address_ptr + 100;
-				//heals_remaining = heals_remaining - 1;
-			//}
-		}
 	}
 	return 0;
 }
