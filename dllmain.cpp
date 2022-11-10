@@ -97,6 +97,17 @@ void checkForKeyChanges() {
 	}
 	*/
 
+	// Teleports the player to the gun shop
+	if (GetAsyncKeyState('K') & 1) {
+		std::cout << "   K key pressed";
+		setCoords(-37883, -19920, 2491);
+	}
+
+	// Teleports the player to the Sewers
+	if (GetAsyncKeyState('J') & 1) {
+		std::cout << "   J key pressed";
+		setCoords(-44966, -35418, 670);
+	}
 
 	if (GetAsyncKeyState('F') & 1) {
 		std::cout << "   F key pressed";
@@ -132,9 +143,9 @@ DWORD WINAPI MyThread(HMODULE hModule)
 	setCoords(-40982, 9000, 100);
 
 	while (true) {
-		displayCoords();
+		//displayCoords();
 
-		//checkForKeyChanges();
+		checkForKeyChanges();
 
 		//coordRestraintLogic();
 
