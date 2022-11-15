@@ -13,43 +13,54 @@ void Player::Chat(const char *msg)
 {
     Vector3 position = this->GetPosition();
 
+    Vector3 *pwnIsland = new Vector3();
+    pwnIsland->x = -42038.9;
+    pwnIsland->y = -36328;
+    pwnIsland->z = 1200;
+
+    Vector3 *goldFarm = new Vector3();
+    goldFarm->x = 20559;
+    goldFarm->y = 41057.3;
+    goldFarm->z = 2200;
+
+    Vector3 *pirateBay = new Vector3();
+    pirateBay->x = 40655;
+    pirateBay->y = 58162.7;
+    pirateBay->z = 200;
+
+    Vector3 *tailMountains = new Vector3();
+    tailMountains->x = 37193.4;
+    tailMountains->y = -10582.7;
+    tailMountains->z = 2000; 
+
+    Vector3 *moltenCave = new Vector3();
+    moltenCave->x = 47549.4;
+    moltenCave->y = 2688.59;
+    moltenCave->z = 380;
+
+
     if (strncmp("tp ", msg, 3) == 0)
     {
-        Vector3 *new_pos = new Vector3();
-        
         if (strncmp("Pwn Island", msg + 3, 10) == 0){
-            new_pos->x = -42038.9;
-            new_pos->y = -36328;
-            new_pos->z = 1200;
-
+            this->SetPosition(*pwnIsland);
         }
         else if (strncmp("Gold Farm", msg + 3, 9) == 0){
-            new_pos->x = 20559;
-            new_pos->y = 41057.3;
-            new_pos->z = 2200;
-
+            this->SetPosition(*goldFarm);
         }
         else if (strncmp("The Pirate Bay", msg + 3, 14) == 0){
-            new_pos->x = 40655;
-            new_pos->y = 58162.7;
-            new_pos->z = 200;
-
+            this->SetPosition(*pirateBay);
         }
         else if (strncmp("Tail Mountains", msg + 3, 14) == 0){
-            new_pos->x = 37193.4;
-            new_pos->y = -10582.7;
-            new_pos->z = 2000;
-
+            this->SetPosition(*tailMountains);
         }
         else if (strncmp("Molten Cave", msg + 3, 10) == 0){
-            new_pos->x = 47549.4;
-            new_pos->y = 2688.59;
-            new_pos->z = 380;
+            this->SetPosition(*moltenCave);
         }
         else{
+            Vector3 *new_pos = new Vector3();
             sscanf(msg + 3, "%f %f %f", &(new_pos->x), &(new_pos->y), &(new_pos->z));
+            this->SetPosition(*new_pos);
         }
-        this->SetPosition(*new_pos);
     }
 
     if (strncmp("set ", msg, 4) == 0)
