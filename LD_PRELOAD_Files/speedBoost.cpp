@@ -9,6 +9,10 @@
 #include <fstream>
 #include <iostream>
 
+bool startTimer = false;
+int32_t timerCount = 0;
+float second = 0;
+
 void Player::Chat(const char *msg)
 {
     Vector3 position = this->GetPosition();
@@ -97,6 +101,14 @@ void Player::Chat(const char *msg)
 		    outfile.close();
         }
     }
+	
+    if (strncmp("start", msg, 5) == 0) {
+	startTimer = true;
+    }
+	
+    if (strncmp("end", msg, 3) == 0) {
+	startTimer = false;
+    }
 
     // Real in-game chat where we can input
     //void (*gameChat)(const char *);
@@ -107,6 +119,15 @@ void Player::Chat(const char *msg)
     
 }
 
+int32_t Actor::GetHealth() {
+    if (startTimer == false) {
+	return 100;
+    }
+    else {
+	int32_t timer = (int32_t)timerCount;
+	return timer;
+    }
+}
 
 void World::Tick(float f){
     Player * player = (Player *)(*(ClientWorld *)this).m_activePlayer.m_object;
@@ -116,6 +137,13 @@ void World::Tick(float f){
     float y = position.y;
     float z = position.z;
 
+    second += f;
+    if (second > 1) {
+	if (startTimer == true) {
+	    timerCount += 1;
+	    second = 0;
+	}
+    }
     //player->Chat("printing coordinates");
     //std::string coord_str = "x" + std::to_string(x) + " y: " + std::to_string(y) + " z: " + std::to_string(z) + "\n";
 
