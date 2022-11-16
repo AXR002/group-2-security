@@ -13,6 +13,10 @@
 
 bool activeMinigame = false;
 
+bool timerActive = false;
+int32_t timerCount = 0;
+float second = 0;
+
 Vector3 currentDestination;
 
 class Locations
@@ -154,9 +158,6 @@ void Player::Chat(const char *msg)
             while (randTo == randFrom){
                 randTo = rand() % 6;
             }
-            
-            std::cout << "randFrom: " << randFrom << std::endl << std::flush;
-            std::cout << "randTo: " << randTo << std::endl << std::flush;
 
     	    Vector3 newLocation = locations.locationArray[randFrom];
             this->SetPosition(newLocation);
@@ -167,6 +168,8 @@ void Player::Chat(const char *msg)
     	    messagePlayer(m);
             m = "MISSION: Make your way to " + locations.locationNames[randTo];
             messagePlayer(m);
+
+            timerActive = true;
             m = "INFO: Your time starts now!";
             messagePlayer(m);
     	    
@@ -179,6 +182,16 @@ void Player::Chat(const char *msg)
     
 }
 
+int32_t Actor::GetHealth() {
+    if (timerActive == false) {
+	return 100;
+    }
+    else {
+	int32_t timer = (int32_t)timerCount;
+	return timer;
+    }
+}
+
 void World::Tick(float f){
     Player * player = (Player *)(*(ClientWorld *)this).m_activePlayer.m_object;
 
@@ -187,7 +200,13 @@ void World::Tick(float f){
     float y = position.y;
     float z = position.z;
 
-    //std::cout << "x: " << x << "\ny: " << y << "\nz: " << z <<  "\n" std::flush;
+    second += f;
+    if (second > 1) {
+        if (timerActive == true) {
+            timerCount += 1;
+            second = 0;
+        }
+    }
 
     if (activeMinigame){
     	float xVal = currentDestination.x;
@@ -196,19 +215,22 @@ void World::Tick(float f){
         //Each location has a 10000x10000 sized zone
         // If the player reaches that zone, they have reached the destination
     	if( ( (xVal-5000) <= x) && (x <= (xVal+5000) ) && ( (yVal-5000) <= y) && (y <= (yVal+5000) )){
-    		messagePlayer("Destination reached!");
+    		messagePlayer("INFO: Destination reached!");
+            timerActive = false;
     		activeMinigame = false;
     	}
     }
-
-    //player->Chat("printing coordinates");
-    //std::string coord_str = "x" + std::to_string(x) + " y: " + std::to_string(y) + " z: " + std::to_string(z) + "\n";
-
-    //printf("x: %f, y: %f, z: %f\n", x, y, z);
-    //player->Chat(coord_str.c_str());
 
     void (*realWorldTick)(float);
 
     realWorldTick =(void (*)(float))dlsym(RTLD_NEXT,"_ZN5World4TickEf");
     realWorldTick(f); 
 }
+
+
+
+//player->Chat("printing coordinates");
+    //std::string coord_str = "x" + std::to_string(x) + " y: " + std::to_string(y) + " z: " + std::to_string(z) + "\n";
+
+    //printf("x: %f, y: %f, z: %f\n", x, y, z);
+    //player->Chat(coord_str.c_str());
