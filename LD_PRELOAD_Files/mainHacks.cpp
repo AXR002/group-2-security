@@ -17,7 +17,8 @@ bool timerActive = false;
 int32_t timerCount = 0;
 float second = 0;
 
-Vector3 currentDestination;
+int currentOrigin;
+int currentDestination;
 
 class Locations
 {
@@ -82,7 +83,7 @@ void Player::Chat(const char *msg)
         	messagePlayer("LOCATION: Teleported to Molten Cave");
             this->SetPosition(*locations.moltenCave);
         }
-        else if (strncmp("Ballmer Peak", msg + 3, 11) == 0){
+        else if (strncmp("Ballmer Peak", msg + 3, 13) == 0){
         	messagePlayer("LOCATION: Teleported to Ballmer Peak");
             this->SetPosition(*locations.ballmerPeak);
         }
@@ -158,21 +159,21 @@ void Player::Chat(const char *msg)
     	{
     	    messagePlayer("INFO: Game has started!");
             //Choose random start and destination location 
-            int randFrom = rand() % 7;
-            int randTo = randFrom;
+            currentOrigin = rand() % 7;
+            currentDestination = currentOrigin;
 
-            while (randTo == randFrom){
-                randTo = rand() % 7;
+            while (currentDestination == currentOrigin){
+                currentDestination = rand() % 7;
             }
 
-    	    Vector3 newLocation = locations.locationArray[randFrom];
+    	    Vector3 newLocation = locations.locationArray[currentOrigin];
             this->SetPosition(newLocation);
 
-            currentDestination = locations.locationArray[randTo];
+            //currentDestination = locations.locationArray[currentDestination];
 
-            std::string m = "LOCATION: You have been teleported to " + locations.locationNames[randFrom];
+            std::string m = "LOCATION: You have been teleported to " + locations.locationNames[currentOrigin];
     	    messagePlayer(m);
-            m = "MISSION: Make your way to " + locations.locationNames[randTo];
+            m = "MISSION: Make your way to " + locations.locationNames[currentDestination];
             messagePlayer(m);
 
             timerActive = true;
@@ -183,6 +184,9 @@ void Player::Chat(const char *msg)
     	    activeMinigame = true;
     	}
     }
+    //-----------------
+    //Display Leaderboard command
+    //-----------------
 
     else{
         messagePlayer("ERROR: could not parse command");
@@ -216,8 +220,11 @@ void World::Tick(float f){
     }
 
     if (activeMinigame){
-    	float xVal = currentDestination.x;
-    	float yVal = currentDestination.y;
+        Locations locations;
+        Vector3 posDest = locations.locationArray[currentDestination];
+
+    	float xVal = posDest.x;
+    	float yVal = posDest.y;
         
         //Each location has a 5000x5000 sized zone
         // If the player reaches that zone, they have reached the destination
@@ -225,8 +232,12 @@ void World::Tick(float f){
     		messagePlayer("MISSION: Destination reached!");
             std::string m = "INFO: You took " + std::to_string(timerCount) + " seconds";
             messagePlayer(m);
+            //-----------------
+            //log scores on leaderboard
+            //-----------------
             timerActive = false;
     		activeMinigame = false;
+
     	}
     }
 
