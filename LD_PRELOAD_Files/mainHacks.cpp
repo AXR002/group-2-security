@@ -25,12 +25,14 @@ class Locations
 
     Vector3 *pirateBay = new Vector3(40655,58162.7,200);
 
-    Vector3 *tailMountains = new Vector3(37193.4,-10582.7,2000);
+    Vector3 *tailMountains = new Vector3(37190,-10585,2000);
 
-    Vector3 *moltenCave = new Vector3(47549.4,2688.59,380);
+    Vector3 *moltenCave = new Vector3(47550,2689,380);
 
-    Vector3 locationArray[5] = {*pwnIsland,*goldFarm,*pirateBay,*tailMountains,*moltenCave};
-    std::string locationNames[5] =  {"Pwn Island","Gold Farm","Pirate Bay","Tail Mountains","Molten Cave"};
+    Vector3 *ballmerPeak = new Vector3(-8500, -10086, 9500);
+
+    Vector3 locationArray[6] = {*pwnIsland,*goldFarm,*pirateBay,*tailMountains,*moltenCave, *ballmerPeak};
+    std::string locationNames[6] =  {"Pwn Island","Gold Farm","Pirate Bay","Tail Mountains","Molten Cave", "Ballmer Peak"};
 
 };
 
@@ -71,6 +73,10 @@ void Player::Chat(const char *msg)
         else if (strncmp("Molten Cave", msg + 3, 10) == 0){
         	messagePlayer("Teleported to Molten Cave");
             this->SetPosition(*locations.moltenCave);
+        }
+        else if (strncmp("Ballmer Peak", msg + 3, 11) == 0){
+        	messagePlayer("Teleported to Ballmer Peak");
+            this->SetPosition(*locations.ballmerPeak);
         }
         else{
             Vector3 *new_pos = new Vector3();
@@ -145,7 +151,7 @@ void Player::Chat(const char *msg)
             //Choose a random location as the destination
             //from the previous location class
     	    srand(time(NULL));
-    	    int randNum = rand() % 5;
+    	    int randNum = rand() % 6;
     	    std::cout << randNum << std::flush;
     	    currentDestination = locations.locationArray[randNum];
 
