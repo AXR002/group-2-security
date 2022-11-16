@@ -187,6 +187,7 @@ void Player::Chat(const char *msg)
             m = "MISSION: Make your way to " + locations.locationNames[currentDestination];
             messagePlayer(m);
 
+            timerCount = 0;
             timerActive = true;
 
             m = "INFO: Your time starts now!";
@@ -211,6 +212,17 @@ void Player::Chat(const char *msg)
             leaderboard.close();
         }
     }
+    /*else if (strncmp("help", msg, 4) == 0)
+    {
+        messagePlayer("----HELP----");
+        messagePlayer("start - Starts the mini game");
+        messagePlayer("tp [location] - Teleports you to a specific location");
+        messagePlayer("tp x y z - Teleports you to certain coords");
+        messagePlayer("set [health/mana/speed] [value] - Sets specific values to your character");
+        messagePlayer("save - Saves your current location");
+        messagePlayer("pos - Prints your current location");
+        messagePlayer("leaderboard - Shows your race times");
+    }*/
 
     else
     {
@@ -294,7 +306,7 @@ void World::Tick(float f)
                         writetofile1(k);
                         std::cout << "done found!" << '\n';
                     }
-                    continue;
+                    // continue;
                     leaderboard1 << line + "\n";
                 }
 
