@@ -19,7 +19,7 @@ class Locations
 {
   //Class holding the positions of different locations in game	
   public:
-  	Vector3 *pwnIsland = new Vector3(-42038.9,-36328,1200);
+  	Vector3 *pwnIsland = new Vector3(-39730,-17500, 2450);
 
     Vector3 *goldFarm = new Vector3(20559,41057.3,2200);
 
@@ -147,17 +147,29 @@ void Player::Chat(const char *msg)
     	else
     	{
     	    messagePlayer("Game has started!");
+            //Choose random start and destination location 
+            int randFrom = rand() % 6;
+            int randTo = randFrom;
 
-            //Choose a random location as the destination
-            //from the previous location class
-    	    srand(time(NULL));
-    	    int randNum = rand() % 6;
-    	    std::cout << randNum << std::flush;
-    	    currentDestination = locations.locationArray[randNum];
+            while (randTo == randFrom){
+                randTo = rand() % 6;
+            }
+            
+            std::cout << "randFrom: " << randFrom << std::endl << std::flush;
+            std::cout << "randTo: " << randTo << std::endl << std::flush;
 
-    	    //std::cout << "Make your way towards " << locations.locationNames[randNum] << "!\n" << std::flush;
-    	    std::string m = "Make your way towards " + locations.locationNames[randNum];
+    	    Vector3 newLocation = locations.locationArray[randFrom];
+            this->SetPosition(newLocation);
+
+            currentDestination = locations.locationArray[randTo];
+
+            std::string m = "INFO: You have been teleported to " + locations.locationNames[randFrom];
     	    messagePlayer(m);
+            m = "MISSION: Make your way to " + locations.locationNames[randTo];
+            messagePlayer(m);
+            m = "INFO: Your time starts now!";
+            messagePlayer(m);
+    	    
         
             //Mini game is now active
     	    activeMinigame = true;
@@ -183,7 +195,7 @@ void World::Tick(float f){
         
         //Each location has a 10000x10000 sized zone
         // If the player reaches that zone, they have reached the destination
-    	if( ( (xVal-10000) <= x) && (x <= (xVal+10000) ) && ( (yVal-10000) <= y) && (y <= (yVal+10000) )){
+    	if( ( (xVal-5000) <= x) && (x <= (xVal+5000) ) && ( (yVal-5000) <= y) && (y <= (yVal+5000) )){
     		messagePlayer("Destination reached!");
     		activeMinigame = false;
     	}
