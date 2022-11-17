@@ -9,16 +9,14 @@
 #include <fstream>
 #include <iostream>
 #include <time.h>
-#include <string>
 
 std::fstream leaderboard;
 std::fstream leaderboard1;
 bool activeMinigame = false;
-
-bool timerActive = false;
 int32_t timerCount = 0;
 float second = 0;
-
+Vector3 currentDestination1;
+float startDistance;
 int currentOrigin;
 int currentDestination;
 
@@ -44,12 +42,11 @@ public:
     std::string locationNames[7] = {"Pwn Island", "Gold Farm", "Pirate Bay", "Tail Mountains", "Molten Cave", "Ballmer Peak", "Unbearable Woods"};
 };
 
-// Original chat function
+//Original chat function
 void (*gameChat)(const char *) = (void (*)(const char *))dlsym(RTLD_NEXT, "_ZN6Player4ChatEPKc");
 
-void messagePlayer(std::string s)
-{
-    printf(s.c_str(), gameChat);
+void messagePlayer(std::string s){
+	printf(s.c_str(), gameChat);
     gameChat("");
     printf("\n");
 }
@@ -160,15 +157,15 @@ void Player::Chat(const char *msg)
 
     else if (strncmp("start", msg, 5) == 0)
     {
-        // This command starts the minigame
-        if (activeMinigame)
-        {
-            messagePlayer("ERROR: A game is already active!");
-        }
-        else
-        {
-            messagePlayer("INFO: Game has started!");
-            // Choose random start and destination location
+    	//This command starts the minigame
+    	if (activeMinigame)
+    	{
+    		messagePlayer("ERROR: A game is already active!");
+    	}
+    	else
+    	{
+    	    messagePlayer("INFO: Game has started!");
+            //Choose random start and destination location 
             currentOrigin = rand() % 7;
             currentDestination = currentOrigin;
 
@@ -177,25 +174,27 @@ void Player::Chat(const char *msg)
                 currentDestination = rand() % 7;
             }
 
-            Vector3 newLocation = locations.locationArray[currentOrigin];
+    	    Vector3 newLocation = locations.locationArray[currentOrigin];
             this->SetPosition(newLocation);
 
-            // currentDestination = locations.locationArray[currentDestination];
+            //currentDestination = locations.locationArray[currentDestination];
 
             std::string m = "LOCATION: You have been teleported to " + locations.locationNames[currentOrigin];
-            messagePlayer(m);
+    	    messagePlayer(m);
             m = "MISSION: Make your way to " + locations.locationNames[currentDestination];
             messagePlayer(m);
 
-            timerCount = 0;
-            timerActive = true;
-
             m = "INFO: Your time starts now!";
             messagePlayer(m);
+    	    
+            timerCount = 0;
+            startDistance = Vector3::Distance(currentDestination1, position);
 
-            activeMinigame = true;
-        }
+            //Mini game is now active
+    	    activeMinigame = true;
+    	}
     }
+
     else if (strncmp("leaderboard", msg, 9) == 0)
     {
         messagePlayer("----LEADERBOARD----");
@@ -212,6 +211,7 @@ void Player::Chat(const char *msg)
             leaderboard.close();
         }
     }
+
     /*else if (strncmp("help", msg, 4) == 0)
     {
         messagePlayer("----HELP----");
@@ -230,18 +230,31 @@ void Player::Chat(const char *msg)
     }
 }
 
-int32_t Actor::GetHealth()
-{
-    if (timerActive == false)
-    {
+int32_t Player::GetMana() {
+    ClientWorld* world = *((ClientWorld**)(dlsym(RTLD_NEXT, "GameWorld")));
+    IPlayer* iplayer= world->m_activePlayer.m_object;
+    Player* player = ((Player*)(iplayer));
+    if (activeMinigame == false) {
         return 100;
     }
-    else
-    {
-        int32_t timer = (int32_t)timerCount;
-        return timer;
+    else {
+        Vector3 currentPosition = player->GetPosition();
+        float Distance = Vector3::Distance(currentDestination1, currentPosition);
+        int32_t distanceAsPercentage = (int32_t)((Distance/startDistance)*100);
+        return distanceAsPercentage;
     }
 }
+
+int32_t Actor::GetHealth() {
+    if (activeMinigame == false) {
+	    return 100;
+    }
+    else {
+	    int32_t timer = (int32_t)timerCount;
+	    return timer;
+    }
+}
+
 void writetofile1(std::string m)
 {
 
@@ -252,6 +265,7 @@ void writetofile1(std::string m)
         leaderboard1.close();
     }
 }
+
 void World::Tick(float f)
 {
     Player *player = (Player *)(*(ClientWorld *)this).m_activePlayer.m_object;
@@ -262,10 +276,8 @@ void World::Tick(float f)
     float z = position.z;
 
     second += f;
-    if (second > 1)
-    {
-        if (timerActive == true)
-        {
+    if (second > 1) {
+        if (activeMinigame == true) {
             timerCount += 1;
             second = 0;
         }
@@ -327,7 +339,6 @@ void World::Tick(float f)
             }
             rename("leaderboardtmp.txt", "leaderboard.txt");
 
-            timerActive = false;
             activeMinigame = false;
         }
     }

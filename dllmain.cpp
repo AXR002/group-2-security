@@ -17,6 +17,8 @@ int* health_address_ptr;
 int* mana_address_ptr;
 float* sprint_address_ptr;
 
+bool flyHack = false;
+
 uintptr_t getPointerPath(int* pointerPath, int length) {
 
 	uintptr_t currentOffset = (uintptr_t)GetModuleHandle(L"PwnAdventure3-Win32-Shipping.exe");
@@ -120,6 +122,15 @@ void checkForKeyChanges() {
 		*health_address_ptr = *health_address_ptr + 100;
 		//heals_remaining = heals_remaining - 1;
 	//}
+	}
+
+	//Enables and disables fly hack
+	if (GetAsyncKeyState('Z') & 1) {
+		flyHack = !flyHack;
+	}
+
+	if (flyHack && GetAsyncKeyState('VK_SPACE')) {
+		*z_coord_address_ptr = *z_coord_address_ptr + 1;
 	}
 }
 
