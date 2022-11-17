@@ -72,33 +72,7 @@ void displayCoords() {
 }
 
 void checkForKeyChanges() {
-	//int heals_remaining = 5;
-	//*mana_address_ptr = 0;
-	//*sprint_address_ptr = 0;
-
-	// The movement speed
-
-	/*while (GetAsyncKeyState('W') & 1) {
-		*sprint_address_ptr = *sprint_address_ptr + 10;
-		//*mana_address_ptr = *sprint_address_ptr;
-
-	}
-	while (GetAsyncKeyState('W') & 0) {
-		*sprint_address_ptr = *sprint_address_ptr - 10;
-		//*mana_address_ptr = *sprint_address_ptr;
-
-	}*/
-
-	//health timer
-
-
-	/*
-	while (*(int*)health_address_ptr != 0) {
-		*health_address_ptr = *health_address_ptr - 1;
-		Sleep(1000);
-	}
-	*/
-
+	
 	// Teleports the player to the gun shop
 	if (GetAsyncKeyState('K') & 1) {
 		std::cout << "   K key pressed";
@@ -111,9 +85,9 @@ void checkForKeyChanges() {
 		setCoords(-44966, -35418, 670);
 	}
 
-	if (GetAsyncKeyState('F') & 1) {
-		std::cout << "   F key pressed";
-		*z_coord_address_ptr = *z_coord_address_ptr + 10000;
+	if (GetAsyncKeyState('M') & 1) {
+		std::cout << "   M key pressed";
+		*mana_address_ptr = *mana_address_ptr + 100;
 	}
 
 	//while (heals_remaining!=0) {
@@ -124,14 +98,8 @@ void checkForKeyChanges() {
 	//}
 	}
 
-	//Enables and disables fly hack
-	if (GetAsyncKeyState('Z') & 1) {
-		flyHack = !flyHack;
-	}
 
-	if (flyHack && GetAsyncKeyState('VK_SPACE')) {
-		*z_coord_address_ptr = *z_coord_address_ptr + 1;
-	}
+	
 }
 
 void coordRestraintLogic() {
