@@ -15,7 +15,6 @@ std::fstream leaderboard1;
 bool activeMinigame = false;
 int32_t timerCount = 0;
 float second = 0;
-Vector3 currentDestination1;
 float startDistance;
 int currentOrigin;
 int currentDestination;
@@ -188,7 +187,7 @@ void Player::Chat(const char *msg)
             messagePlayer(m);
     	    
             timerCount = 0;
-            startDistance = Vector3::Distance(currentDestination1, position);
+            startDistance = Vector3::Distance((locations.locationArray[currentDestination]), position);
 
             //Mini game is now active
     	    activeMinigame = true;
@@ -231,6 +230,7 @@ void Player::Chat(const char *msg)
 }
 
 int32_t Player::GetMana() {
+    Locations locations;
     ClientWorld* world = *((ClientWorld**)(dlsym(RTLD_NEXT, "GameWorld")));
     IPlayer* iplayer= world->m_activePlayer.m_object;
     Player* player = ((Player*)(iplayer));
@@ -239,9 +239,9 @@ int32_t Player::GetMana() {
     }
     else {
         Vector3 currentPosition = player->GetPosition();
-        float Distance = Vector3::Distance(currentDestination1, currentPosition);
-        int32_t distanceAsPercentage = (int32_t)((Distance/startDistance)*100);
-        return distanceAsPercentage;
+        float distance = Vector3::Distance(currentPosition, locations.locationArray[currentDestination]);
+        //int32_t distanceAsPercentage = (int32_t)((distance/startDistance)*100);
+        return (int32_t)distance;
     }
 }
 
@@ -291,9 +291,9 @@ void World::Tick(float f)
         float xVal = posDest.x;
         float yVal = posDest.y;
 
-        // Each location has a 5000x5000 sized zone
+        // Each location has a 1000x1000 sized zone
         //  If the player reaches that zone, they have reached the destination
-        if (((xVal - 5000) <= x) && (x <= (xVal + 5000)) && ((yVal - 5000) <= y) && (y <= (yVal + 5000)))
+        if (((xVal - 1000) <= x) && (x <= (xVal + 1000)) && ((yVal - 1000) <= y) && (y <= (yVal + 1000)))
         {
             messagePlayer("MISSION: Destination reached!");
             std::string m = "INFO: You took " + std::to_string(timerCount) + " seconds";
