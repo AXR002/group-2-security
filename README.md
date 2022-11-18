@@ -24,6 +24,6 @@
 
 6. Type "help" into the in-game chat to see all the different commands our hack allows you to do.
 
-7. Type start to start the minigame
+7. Type "start" to start the minigame
 
 8. Enjoy the minigame!
