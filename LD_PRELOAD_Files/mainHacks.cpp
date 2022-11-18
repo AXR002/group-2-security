@@ -211,17 +211,17 @@ void Player::Chat(const char *msg)
         }
     }
 
-    /*else if (strncmp("help", msg, 4) == 0)
+    else if (strncmp("help", msg, 4) == 0)
     {
-        messagePlayer("----HELP----");
-        messagePlayer("start - Starts the mini game");
-        messagePlayer("tp [location] - Teleports you to a specific location");
-        messagePlayer("tp x y z - Teleports you to certain coords");
-        messagePlayer("set [health/mana/speed] [value] - Sets specific values to your character");
-        messagePlayer("save - Saves your current location");
-        messagePlayer("pos - Prints your current location");
-        messagePlayer("leaderboard - Shows your race times");
-    }*/
+        messagePlayer("All in game commands printed to console");
+        printf("start - Starts the mini game\n");
+        printf("tp [location] - Teleports you to a specific location\n");
+        printf("tp x y z - Teleports you to certain coords\n");
+        printf("set [health/mana/speed] [value] - Sets specific values to your character\n");
+        printf("save - Saves your current location to a file\n");
+        printf("pos - Prints your current location to the console\n");
+        printf("leaderboard - Shows your race times\n");
+    }
 
     else
     {
