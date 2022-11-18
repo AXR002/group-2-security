@@ -10,7 +10,7 @@
 ### Game being hacked: Pwn Adventure 3: Pwnie Island
 
 ## How to run our hacks
-1. Download the mainHacks.cpp file located here. 
+1. Download the mainHacks.cpp file located [here](LD_PRELOAD_Files/mainHacks.cpp). 
 
 2. Compile the file using the following command:
    - `g++ mainHacks.cpp -shared -fPIC -o mainHacks.so`
