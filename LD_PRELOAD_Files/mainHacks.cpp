@@ -176,8 +176,6 @@ void Player::Chat(const char *msg)
     	    Vector3 newLocation = locations.locationArray[currentOrigin];
             this->SetPosition(newLocation);
 
-            //currentDestination = locations.locationArray[currentDestination];
-
             std::string m = "LOCATION: You have been teleported to " + locations.locationNames[currentOrigin];
     	    messagePlayer(m);
             m = "MISSION: Make your way to " + locations.locationNames[currentDestination];
@@ -235,19 +233,18 @@ int32_t Player::GetMana() {
     IPlayer* iplayer= world->m_activePlayer.m_object;
     Player* player = ((Player*)(iplayer));
     if (activeMinigame == false) {
-        return 100;
+        return this->m_mana;
     }
     else {
         Vector3 currentPosition = player->GetPosition();
         float distance = Vector3::Distance(currentPosition, locations.locationArray[currentDestination]);
-        //int32_t distanceAsPercentage = (int32_t)((distance/startDistance)*100);
         return (int32_t)distance;
     }
 }
 
 int32_t Actor::GetHealth() {
     if (activeMinigame == false) {
-	    return 100;
+	    return this->m_health;
     }
     else {
 	    int32_t timer = (int32_t)timerCount;
